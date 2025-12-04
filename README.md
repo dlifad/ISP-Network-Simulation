@@ -19,7 +19,7 @@ routing protocol OSPF dan BGP, serta layanan server (Web + DNS). Simulasi dibuat
 - DNS Server + Web Server
 
 ## 🧱 Topologi
-![Topology](topology.png)
+![Topology](topology-full.png)
 
 ## ⚙️ Konfigurasi Utama
 ### VLAN
