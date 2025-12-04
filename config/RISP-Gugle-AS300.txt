@@ -1,0 +1,103 @@
+============================================================
+DEVICE CONFIGURATION EXPORT
+Project  : Enterprise Network Simulation
+Role     : RISP-Gugle (Edge Router to Web/DNS Server Cluster)
+AS       : 300
+============================================================
+
+Hostname: RISP-Gugle
+Platform: Cisco 1941
+OS       : IOS 15.1
+
+------------------------------------------------------------
+ ROLE & TOPOLOGY
+------------------------------------------------------------
+- Berperan sebagai ISP yang menyediakan akses ke layanan online,
+  seperti Web Server dan DNS Server Gugle.
+- Terkoneksi ke:
+  * RISP-Lain (AS 200) via Serial0/0/1
+  * Cluster Server Gugle melalui GigabitEthernet0/0
+- Menggunakan:
+  * OSPF process 300 untuk internal route server cluster
+  * BGP AS 300 untuk publik route exchange
+- Redistribusi dua arah antara OSPF ↔ BGP.
+
+------------------------------------------------------------
+ INTERFACE CONFIGURATION
+------------------------------------------------------------
+
+# Link ke cluster server Gugle (LAN)
+interface GigabitEthernet0/0
+ ip address 11.11.11.1 255.255.255.252
+ duplex auto
+ speed auto
+
+# Link ke RISP-Lain (AS 200)
+interface Serial0/0/1
+ ip address 30.30.30.2 255.255.255.252
+
+# Unused interfaces
+interface GigabitEthernet0/1
+ no ip address
+ shutdown
+
+interface Serial0/0/0
+ no ip address
+ clock rate 2000000
+ shutdown
+
+interface Vlan1
+ no ip address
+ shutdown
+
+------------------------------------------------------------
+ IGP CONFIGURATION (OSPF)
+------------------------------------------------------------
+
+router ospf 300
+ log-adjacency-changes
+
+ # Jaringan server Gugle
+ network 11.11.11.0 0.0.0.3 area 0
+
+ # Redistribusi route dari BGP ke OSPF
+ redistribute bgp 300 subnets
+
+------------------------------------------------------------
+ EGP CONFIGURATION (BGP)
+------------------------------------------------------------
+
+router bgp 300
+ bgp log-neighbor-changes
+ no synchronization
+
+ # Peering ke RISP-Lain (AS 200)
+ neighbor 30.30.30.1 remote-as 200
+
+ # Redistribusi OSPF ke dalam BGP
+ redistribute ospf 300
+
+------------------------------------------------------------
+ GENERAL SYSTEM SETTINGS
+------------------------------------------------------------
+
+version 15.1
+no service password-encryption
+no ip cef
+no ipv6 cef
+ip classless
+ip flow-export version 9
+no cdp run
+
+------------------------------------------------------------
+ LINES & ACCESS
+------------------------------------------------------------
+
+line con 0
+line aux 0
+line vty 0 4
+ login
+
+------------------------------------------------------------
+ END OF CONFIGURATION
+============================================================

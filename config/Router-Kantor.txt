@@ -1,0 +1,78 @@
+============================================================
+DEVICE CONFIGURATION EXPORT
+Project  : Enterprise Network Simulation
+Role     : Router Kantor (Inter-VLAN Routing + OSPF)
+============================================================
+
+Hostname: Router-Kantor
+Platform: Cisco 1941
+OS       : IOS 15.1
+
+------------------------------------------------------------
+ DHCP CONFIGURATION
+------------------------------------------------------------
+# DHCP digunakan untuk jaringan WiFi Public (VLAN 200)
+ip dhcp pool VLAN200
+ network 192.168.200.0 255.255.255.0
+ default-router 192.168.200.1
+ dns-server 172.168.0.2
+
+------------------------------------------------------------
+ INTERFACE CONFIGURATION
+------------------------------------------------------------
+
+# WAN Link to ISP
+interface GigabitEthernet0/0
+ ip address 10.10.10.1 255.255.255.252
+ duplex auto
+ speed auto
+
+# Interface trunk to Switch (Router-On-A-Stick)
+interface GigabitEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+
+# VLAN 10 - Pegawai
+interface GigabitEthernet0/1.10
+ encapsulation dot1Q 10
+ ip address 192.168.0.1 255.255.255.0
+
+# VLAN 100 - Administrator
+interface GigabitEthernet0/1.100
+ encapsulation dot1Q 100
+ ip address 192.168.100.1 255.255.255.0
+
+# VLAN 200 - Public/WiFi Access
+interface GigabitEthernet0/1.200
+ encapsulation dot1Q 200
+ ip address 192.168.200.1 255.255.255.0
+
+------------------------------------------------------------
+ ROUTING CONFIGURATION
+------------------------------------------------------------
+
+# OSPF Multi-Area Routing
+router ospf 1
+ log-adjacency-changes
+
+ # Backbone Area0 (WAN Link)
+ network 10.10.10.0 0.0.0.3 area 0
+
+ # Internal Networks (VLAN)
+ network 192.168.0.0   0.0.0.255 area 1
+ network 192.168.100.0 0.0.0.255 area 1
+ network 192.168.200.0 0.0.0.255 area 1
+
+------------------------------------------------------------
+ GENERAL SYSTEM CONFIG
+------------------------------------------------------------
+
+version 15.1
+no service password-encryption
+no ip cef
+ip classless
+
+------------------------------------------------------------
+ END OF CONFIGURATION
+============================================================

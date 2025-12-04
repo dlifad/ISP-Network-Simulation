@@ -1,0 +1,73 @@
+============================================================
+DEVICE CONFIGURATION EXPORT
+Project  : Enterprise Network Simulation
+Role     : Switch LT1 (Access Layer - VLAN Segmentation)
+============================================================
+
+Hostname: Switch-LT1
+Platform: Cisco Catalyst (Simulated - PT)
+OS       : IOS 15.0
+
+------------------------------------------------------------
+ VLAN ASSIGNMENT
+------------------------------------------------------------
+
+# VLAN mapping used based on port assignments:
+# VLAN10  → Pegawai (Employee Network)
+# VLAN100 → Administrator Network
+# VLAN200 → Public/Wireless Segment (uplink to AP)
+
+------------------------------------------------------------
+ ACCESS PORT CONFIGURATION
+------------------------------------------------------------
+
+# VLAN 10 - Pegawai (Ports 1 - 10)
+interface range FastEthernet0/1 - 10
+ switchport access vlan 10
+
+# VLAN 100 - Administrator (Ports 11 - 20)
+interface range FastEthernet0/11 - 20
+ switchport access vlan 100
+
+# Ports 21 - 24 currently unused
+
+------------------------------------------------------------
+ TRUNK & SPECIAL PORTS
+------------------------------------------------------------
+
+# GigabitEthernet0/1 - Connected to Wireless AP (Public VLAN)
+interface GigabitEthernet0/1
+ switchport access vlan 200
+
+# GigabitEthernet0/2 - Trunk to Distribution/Router
+interface GigabitEthernet0/2
+ switchport mode trunk
+
+------------------------------------------------------------
+ VLAN MANAGEMENT INTERFACE (DISABLED)
+------------------------------------------------------------
+
+interface Vlan1
+ no ip address
+ shutdown
+
+------------------------------------------------------------
+ SPANNING TREE CONFIGURATION
+------------------------------------------------------------
+
+spanning-tree mode pvst
+spanning-tree extend system-id
+
+------------------------------------------------------------
+ REMOTE ACCESS SETTINGS
+------------------------------------------------------------
+
+line console 0
+ no password set
+
+line vty 0 15
+ login
+
+------------------------------------------------------------
+ END OF CONFIGURATION
+============================================================

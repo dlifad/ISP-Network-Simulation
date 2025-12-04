@@ -1,0 +1,59 @@
+============================================================
+DEVICE CONFIGURATION EXPORT
+Project  : Enterprise Network Simulation
+Role     : Router Gugle (Server Zone Gateway + OSPF)
+============================================================
+
+Hostname: Router-Gugle
+Platform: Cisco 1941
+OS       : IOS 15.1
+
+------------------------------------------------------------
+ INTERFACE CONFIGURATION
+------------------------------------------------------------
+
+# WAN Link to ISP (OSPF Area 0)
+interface GigabitEthernet0/0
+ ip address 11.11.11.2 255.255.255.252
+ duplex auto
+ speed auto
+
+# LAN Interface to Server Network
+interface GigabitEthernet0/1
+ ip address 172.168.0.1 255.255.255.0
+ duplex auto
+ speed auto
+
+# Default VLAN (disabled)
+interface Vlan1
+ no ip address
+ shutdown
+
+------------------------------------------------------------
+ ROUTING CONFIGURATION
+------------------------------------------------------------
+
+# OSPF Multi-Area
+router ospf 2
+ log-adjacency-changes
+
+ # Backbone (WAN)
+ network 11.11.11.0 0.0.0.3 area 0
+
+ # Internal Server Network
+ network 172.168.0.0 0.0.0.255 area 1
+
+------------------------------------------------------------
+ GENERAL SYSTEM CONFIG
+------------------------------------------------------------
+
+version 15.1
+no service password-encryption
+ip cef
+no ipv6 cef
+ip classless
+no cdp run
+
+------------------------------------------------------------
+ END OF CONFIGURATION
+============================================================

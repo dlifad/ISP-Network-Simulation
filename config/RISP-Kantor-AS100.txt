@@ -1,0 +1,103 @@
+============================================================
+DEVICE CONFIGURATION EXPORT
+Project  : Enterprise Network Simulation
+Role     : RISP-Kantor (Edge Router to Enterprise)
+AS       : 100
+============================================================
+
+Hostname: RISP-Kantor
+Platform: Cisco 1941
+OS       : IOS 15.1
+
+------------------------------------------------------------
+ TOPOLOGY & PERAN
+------------------------------------------------------------
+- Berfungsi sebagai ISP yang terhubung ke:
+  * Router Kantor (LAN enterprise) via GigabitEthernet0/0
+  * RISP-Lain (AS 200) via Serial0/0/0
+- Menggunakan:
+  * OSPF process 100 untuk pertukaran route dengan Router Kantor
+  * BGP AS 100 untuk pertukaran route dengan RISP-Lain (AS 200)
+- Melakukan redistribusi dua arah:
+  * OSPF → BGP
+  * BGP → OSPF
+
+------------------------------------------------------------
+ INTERFACE CONFIGURATION
+------------------------------------------------------------
+
+# Link ke Router Kantor
+interface GigabitEthernet0/0
+ ip address 10.10.10.2 255.255.255.252
+ duplex auto
+ speed auto
+
+# Serial link ke RISP-Lain (AS 200)
+interface Serial0/0/0
+ ip address 20.20.20.1 255.255.255.252
+
+# Unused interfaces
+interface GigabitEthernet0/1
+ no ip address
+ shutdown
+
+interface Serial0/0/1
+ no ip address
+ clock rate 2000000
+ shutdown
+
+interface Vlan1
+ no ip address
+ shutdown
+
+------------------------------------------------------------
+ IGP CONFIGURATION (OSPF)
+------------------------------------------------------------
+
+router ospf 100
+ log-adjacency-changes
+
+ # Jaringan antara RISP-Kantor dan Router Kantor
+ network 10.10.10.0 0.0.0.3 area 0
+
+ # Redistribusi route BGP ke dalam OSPF
+ redistribute bgp 100 subnets
+
+------------------------------------------------------------
+ EGP CONFIGURATION (BGP)
+------------------------------------------------------------
+
+router bgp 100
+ bgp log-neighbor-changes
+ no synchronization
+
+ # Peer BGP dengan RISP-Lain (AS 200)
+ neighbor 20.20.20.2 remote-as 200
+
+ # Redistribusi route OSPF ke dalam BGP
+ redistribute ospf 100
+
+------------------------------------------------------------
+ GENERAL SYSTEM SETTINGS
+------------------------------------------------------------
+
+version 15.1
+no service password-encryption
+no ip cef
+no ipv6 cef
+ip classless
+ip flow-export version 9
+no cdp run
+
+------------------------------------------------------------
+ LINES & ACCESS
+------------------------------------------------------------
+
+line con 0
+line aux 0
+line vty 0 4
+ login
+
+------------------------------------------------------------
+ END OF CONFIGURATION
+============================================================

@@ -1,0 +1,74 @@
+============================================================
+DEVICE CONFIGURATION EXPORT
+Project  : Enterprise Network Simulation
+Role     : Switch LT2 (Access & Trunk Layer)
+============================================================
+
+Hostname: Switch-LT2
+Platform: Cisco Catalyst (Simulated - PT)
+OS       : IOS 15.0
+
+------------------------------------------------------------
+ VLAN DEFINITIONS
+------------------------------------------------------------
+
+# VLAN mapping (based on ports configuration)
+# VLAN10  → Pegawai (Employees)
+# VLAN100 → Administrator
+# VLAN200 → Public WiFi (Trunk uplink from AP/Router)
+
+------------------------------------------------------------
+ ACCESS PORT CONFIGURATION
+------------------------------------------------------------
+
+# VLAN 10 - Pegawai (Ports 1 - 10)
+interface range FastEthernet0/1 - 10
+ switchport access vlan 10
+
+# VLAN 100 - Administrator (Ports 11 - 20)
+interface range FastEthernet0/11 - 20
+ switchport access vlan 100
+
+# Remaining ports unused (21 - 24)
+
+------------------------------------------------------------
+ TRUNK CONFIGURATION
+------------------------------------------------------------
+
+# Uplink to Router or Distribution Switch
+interface GigabitEthernet0/2
+ switchport mode trunk
+
+# Connection to Access Point (Public VLAN)
+interface GigabitEthernet0/1
+ switchport access vlan 200
+ switchport mode trunk
+
+------------------------------------------------------------
+ VLAN MANAGEMENT INTERFACE (DISABLED)
+------------------------------------------------------------
+
+interface Vlan1
+ no ip address
+ shutdown
+
+------------------------------------------------------------
+ SPANNING TREE SETTINGS
+------------------------------------------------------------
+
+spanning-tree mode pvst
+spanning-tree extend system-id
+
+------------------------------------------------------------
+ REMOTE ACCESS & CONSOLE
+------------------------------------------------------------
+
+line console 0
+ no password set
+
+line vty 0 15
+ login
+
+------------------------------------------------------------
+ END OF CONFIGURATION
+============================================================

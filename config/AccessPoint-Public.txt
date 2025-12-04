@@ -1,0 +1,72 @@
+============================================================
+DEVICE CONFIGURATION EXPORT
+Project  : Enterprise Network Simulation
+Device   : HomeRouter-PT-AC
+Role     : Wireless Access Point (VLAN 200)
+Mode     : Layer-2 Bridge (No IP Assigned)
+============================================================
+
+------------------------------------------------------------
+ OPERATING MODE
+------------------------------------------------------------
+Internet Connection Type   : Wireless AP
+Routing Capability         : Disabled
+NAT                        : Disabled
+DHCP Server                : Disabled
+
+Note:
+This AP functions solely as a bridge between wireless clients
+and VLAN 200. It does not participate in routing or IP assignments.
+
+------------------------------------------------------------
+ LAN & MANAGEMENT SETTINGS
+------------------------------------------------------------
+LAN IP Address : Not Assigned (No management IP)
+LAN Subnet     : Not Configured
+
+Implication:
+The AP cannot be accessed via its IP address for remote 
+configuration. All configuration changes must be performed
+locally via Packet Tracer GUI.
+
+------------------------------------------------------------
+ WIRELESS SETTINGS (ACTIVE)
+------------------------------------------------------------
+
+Band: 2.4 GHz
+SSID: "Wifi Publik"
+SSID Broadcast: Enabled
+Channel: Auto (Ch1 default)
+Security Mode: WPA2-PSK
+Encryption: AES
+Passphrase: 12345678
+
+Bands 5GHz and Guest networks: Disabled
+
+------------------------------------------------------------
+ SWITCH INTEGRATION
+------------------------------------------------------------
+
+Connected Switch Port: GigabitEthernet0/1 (Switch LT1)
+Switch Port Type: Access
+Assigned VLAN: 200
+
+------------------------------------------------------------
+ CLIENT BEHAVIOR EXPECTATION
+------------------------------------------------------------
+
+✔ Wireless clients obtain DHCP addressing from Router-Kantor
+✔ Wireless clients default gateway: 192.168.200.1
+✔ Wireless clients DNS: 172.168.0.2
+✔ Wireless clients isolated from VLAN10 (Pegawai) and VLAN100 (Admin)
+
+------------------------------------------------------------
+ NOTES
+------------------------------------------------------------
+This AP operates as a transparent wireless bridge. Assigning a
+static management IP is optional, but may be used in future
+deployments for remote administration.
+
+------------------------------------------------------------
+ END OF CONFIGURATION
+============================================================

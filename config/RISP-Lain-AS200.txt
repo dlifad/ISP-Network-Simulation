@@ -1,0 +1,88 @@
+============================================================
+DEVICE CONFIGURATION EXPORT
+Project  : Enterprise Network Simulation
+Role     : RISP-Lain (Transit ISP Router)
+AS       : 200
+============================================================
+
+Hostname: RISP-Lain
+Platform: Cisco 1941
+OS       : IOS 15.1
+
+------------------------------------------------------------
+ TOPOLOGY & PERAN
+------------------------------------------------------------
+- Berperan sebagai ISP transit di antara:
+  * RISP-Kantor (AS 100)  via Serial0/0/0 (20.20.20.0/30)
+  * RISP-Gugle  (AS 300)  via Serial0/0/1 (30.30.30.0/30)
+- Hanya menjalankan BGP (tanpa IGP), fokus sebagai router core ISP.
+
+------------------------------------------------------------
+ INTERFACE CONFIGURATION
+------------------------------------------------------------
+
+# Link ke RISP-Kantor (AS 100)
+interface Serial0/0/0
+ ip address 20.20.20.2 255.255.255.252
+ clock rate 2000000
+
+# Link ke RISP-Gugle (AS 300)
+interface Serial0/0/1
+ ip address 30.30.30.1 255.255.255.252
+ clock rate 2000000
+
+# Interface lain tidak digunakan
+interface GigabitEthernet0/0
+ no ip address
+ shutdown
+
+interface GigabitEthernet0/1
+ no ip address
+ shutdown
+
+interface Vlan1
+ no ip address
+ shutdown
+
+------------------------------------------------------------
+ BGP CONFIGURATION
+------------------------------------------------------------
+
+router bgp 200
+ bgp log-neighbor-changes
+ no synchronization
+
+ # Neighbor dengan RISP-Kantor (AS 100)
+ neighbor 20.20.20.1 remote-as 100
+
+ # Neighbor dengan RISP-Gugle (AS 300)
+ neighbor 30.30.30.2 remote-as 300
+
+Note:
+RISP-Lain bertindak sebagai transit AS yang meneruskan prefix
+antara AS 100 dan AS 300.
+
+------------------------------------------------------------
+ GENERAL SYSTEM SETTINGS
+------------------------------------------------------------
+
+version 15.1
+no service password-encryption
+no ip cef
+no ipv6 cef
+ip classless
+ip flow-export version 9
+no cdp run
+
+------------------------------------------------------------
+ LINES & ACCESS
+------------------------------------------------------------
+
+line con 0
+line aux 0
+line vty 0 4
+ login
+
+------------------------------------------------------------
+ END OF CONFIGURATION
+============================================================

@@ -1,0 +1,75 @@
+============================================================
+DEVICE CONFIGURATION EXPORT
+Project  : Enterprise Network Simulation
+Role     : Switch Gugle (Server Access Switch)
+============================================================
+
+Hostname: Switch-Gugle
+Platform: Cisco Catalyst (Simulated - PT)
+OS       : IOS 15.0
+
+------------------------------------------------------------
+ ROLE & TOPOLOGY
+------------------------------------------------------------
+- Menjadi access switch untuk:
+  * Web Server  (172.168.0.0/24)
+  * DNS Server  (172.168.0.0/24)
+- Terkoneksi ke Router-Gugle melalui port GigabitEthernet0/1.
+- Seluruh perangkat server berada di satu subnet tanpa VLAN
+  tambahan (menggunakan default VLAN 1).
+
+------------------------------------------------------------
+ INTERFACE CONFIGURATION
+------------------------------------------------------------
+
+# Semua port menggunakan VLAN default (VLAN 1)
+# Port terpakai:
+#   - Fa0/1 : Web Server
+#   - Fa0/2 : DNS Server
+#   - Gi0/1 : Uplink ke Router-Gugle
+
+interface FastEthernet0/1
+ ! Connected to Web Server (Fa0)
+
+interface FastEthernet0/2
+ ! Connected to DNS Server (Fa0)
+
+interface GigabitEthernet0/1
+ ! Uplink to Router-Gugle (172.168.0.1/24)
+
+! Ports lain (Fa0/3–Fa0/24, Gi0/2) tidak digunakan dan dibiarkan
+! pada konfigurasi default (access VLAN 1).
+
+------------------------------------------------------------
+ VLAN MANAGEMENT INTERFACE
+------------------------------------------------------------
+
+interface Vlan1
+ no ip address
+ shutdown
+
+Note:
+Switch ini tidak menggunakan IP management. Pengelolaan hanya
+dilakukan via Packet Tracer GUI. Dalam deployment nyata, biasanya
+VLAN manajemen akan diberi IP statis.
+
+------------------------------------------------------------
+ STP CONFIGURATION
+------------------------------------------------------------
+
+spanning-tree mode pvst
+spanning-tree extend system-id
+
+------------------------------------------------------------
+ REMOTE ACCESS
+------------------------------------------------------------
+
+line console 0
+ no password set
+
+line vty 0 15
+ login
+
+------------------------------------------------------------
+ END OF CONFIGURATION
+============================================================
