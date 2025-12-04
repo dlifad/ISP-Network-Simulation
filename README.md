@@ -49,6 +49,5 @@ routing protocol OSPF dan BGP, serta layanan server (Web + DNS). Simulasi dibuat
 ## 📂 File
 | File | Fungsi |
 |------|--------|
-| `topology.pkt` | File simulasi |
+| `Enterprise-Network-Simulation.pkt` | File simulasi |
 | `configs/` | Konfigurasi CLI per perangkat |
-| `docs/testing-results.md` | Dokumentasi hasil test |
